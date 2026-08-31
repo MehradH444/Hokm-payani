@@ -6,6 +6,7 @@ const { Server } = require('socket.io');
 const connectDB = require('./db');
 const authRoutes = require('./authRoutes');
 const userRoutes = require('./userRoutes');
+const socketHandler = require('./socketHandler');
 
 const app = express();
 const server = http.createServer(app);
@@ -33,14 +34,8 @@ const io = new Server(server, {
   }
 });
 
-// مدیریت اتصالات سوکت
-io.on('connection', (socket) => {
-  console.log(`[Socket] Client connected: ${socket.id}`);
-
-  socket.on('disconnect', () => {
-    console.log(`[Socket] Client disconnected: ${socket.id}`);
-  });
-});
+// فراخوانی هندلر WebSocket
+socketHandler(io);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
