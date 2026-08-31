@@ -6,6 +6,7 @@ const { Server } = require('socket.io');
 const connectDB = require('./db');
 const authRoutes = require('./authRoutes');
 const userRoutes = require('./userRoutes');
+const socialRoutes = require('./socialRoutes');
 const socketHandler = require('./socketHandler');
 
 const app = express();
@@ -21,6 +22,7 @@ connectDB();
 // روت‌های API
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/social', socialRoutes);
 
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Hokm Master Server is running' });
