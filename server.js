@@ -4,6 +4,7 @@ const http = require('http');
 const cors = require('cors');
 const { Server } = require('socket.io');
 const connectDB = require('./db');
+const authRoutes = require('./authRoutes');
 
 const app = express();
 const server = http.createServer(app);
@@ -15,16 +16,19 @@ app.use(express.json());
 // اتصال به دیتابیس
 connectDB();
 
+// روت‌های API
+app.use('/api/auth', authRoutes);
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'Hokm Master Server is running' });
+});
+
 // تنظیمات WebSocket برای بازی هم‌زمان
 const io = new Server(server, {
   cors: {
     origin: '*',
     methods: ['GET', 'POST']
   }
-});
-
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'OK', message: 'Hokm Master Server is running' });
 });
 
 // مدیریت اتصالات سوکت
